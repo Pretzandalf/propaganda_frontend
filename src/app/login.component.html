@@ -1,0 +1,64 @@
+<tui-root>
+  <div class="rootE">
+    <form
+      tuiAppearance="floating"
+      tuiCardLarge
+      tuiForm="l"
+      [formGroup]="form"
+      [style.max-width.rem]="32"
+      (ngSubmit)="onSubmit()"
+    >
+      <header tuiHeader>
+        <h2 tuiTitle>
+          Login
+          <span tuiSubtitle>Enter your credentials to access your account.</span>
+        </h2>
+      </header>
+
+      <tui-textfield
+        [style.border-color]="loginFailed ? 'red' : null"
+      >
+        <label tuiLabel>Username</label>
+        <input
+          formControlName="username"
+          placeholder="hehehe"
+          tuiTextfield
+          type="text"
+        />
+
+      </tui-textfield>
+      <tui-error
+        formControlName="username"
+        [error]="[] | tuiFieldError | async"
+      />
+
+      <tui-textfield
+        [style.border-color]="loginFailed ? 'red' : null"
+      >
+        <label tuiLabel>Password</label>
+        <input
+          tuiTextfield
+          type="password"
+          formControlName="password"
+        />
+        <tui-icon tuiPassword/>
+      </tui-textfield>
+      <tui-error
+        formControlName="password"
+        [error]="[] | tuiFieldError | async"
+      />
+      <yandex-smart-captcha [webview]="true" clientKey="ysc1_YTBeD7foI3fFZtMtHvIRS8QNQoZ9W0N4WAKoPabp28b28999" language="en" id="cap" (onSuccess)="capt = true"></yandex-smart-captcha>
+      <div *ngIf="loginFailed" style="color: red;">Incorrect username or password.</div>
+      <footer>
+        <button
+          tuiButton
+          [disabled]="!capt"
+          type="submit"
+        >
+          Sign In
+        </button>
+        <a tuiLink routerLink="/register">Don't have an account?</a>
+      </footer>
+    </form>
+  </div>
+</tui-root>

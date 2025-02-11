@@ -1,0 +1,98 @@
+<tui-root>
+  <div class="rootE">
+    <form
+      tuiAppearance="floating"
+      tuiCardLarge
+      tuiForm="l"
+      [formGroup]="form"
+      [style.max-width.rem]="32"
+      (ngSubmit)="onSubmit()"
+      novalidate
+    >
+      <label tuiLabel style="color: red"><b>{{ exists }}</b></label>
+      <header tuiHeader>
+        <h2 tuiTitle>
+          Registration
+          <span tuiSubtitle>Start using propcheck now!</span>
+        </h2>
+        <span tuiAccessories>
+             </span>
+      </header>
+      <tui-textfield>
+        <label tuiLabel>Email</label>
+        <input
+          formControlName="email"
+          placeholder="foo@bee.me"
+          tuiTextfield
+          type="email"
+        />
+      </tui-textfield>
+      <tui-error
+        formControlName="email"
+        [error]="[] | tuiFieldError | async"
+      />
+      <tui-textfield>
+        <label *ngIf="form.get('username')?.hasError('minlength')" tuiLabel>8+ chars</label>
+        <label tuiLabel>Username</label>
+        <input
+          tuiTextfield
+          [minlength]="8"
+          type="text"
+          formControlName="username"
+        >
+
+      </tui-textfield>
+      <tui-error
+        formControlName="username"
+        [error]="[] | tuiFieldError | async"
+      />
+      <tui-textfield>
+        <label *ngIf="form.get('password')?.hasError('minlength')" tuiLabel>8+ chars</label>
+        <label tuiLabel>Password</label>
+        <input
+          tuiTextfield
+          type="password"
+          [minlength]="8"
+          formControlName="password"
+        />
+        <tui-icon tuiPassword/>
+      </tui-textfield>
+      <tui-error
+        formControlName="password"
+        [error]="[] | tuiFieldError | async"
+      />
+      <tui-textfield>
+        <label tuiLabel>First name</label>
+        <input
+        tuiTextfield
+        type="text"
+        [minlength]="4"
+        formControlName="name">
+      </tui-textfield>
+      <tui-error
+        formControlName="name"
+      [error]="[] | tuiFieldError | async"/>
+      <tui-textfield>
+        <label tuiLabel>Last name</label>
+        <input
+        tuiTextfield
+        type="text"
+        formControlName="lastName">
+      </tui-textfield>
+      <tui-error
+        formControlName="lastName"
+        [error]="[] | tuiFieldError | async"/>
+      <yandex-smart-captcha clientKey="ysc1_YTBeD7foI3fFZtMtHvIRS8QNQoZ9W0N4WAKoPabp28b28999" language="en" id="cap" (onSuccess)="capt = true"></yandex-smart-captcha>
+      <footer>
+        <button
+          [disabled]="!capt"
+          tuiButton
+          type="submit"
+        >
+          Sign Up
+        </button>
+        <a tuiLink routerLink="/login">Alredy have an account?</a>
+      </footer>
+    </form>
+  </div>
+</tui-root>

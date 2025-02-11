@@ -1,0 +1,183 @@
+
+<tui-root>
+  <div class="overlay" *ngIf="!checked && is2Fa">
+    <h1 id="h">Enter your 2FA-code!</h1>
+    <div class="overlay-content">
+      <tui-textfield id="code">
+        <input id="code_i"
+          maxlength="6"
+          placeholder="••••••"
+          tuiInputPin
+          [formControl]="code"
+        />
+      </tui-textfield>
+      <br *ngIf="incorrect">
+      <tui-error *ngIf="incorrect" [error]="'Incorrect code'" id="er" form="code"></tui-error>
+    </div>
+  </div>
+
+  <div class="chat-container">
+    <!-- Верхняя панель с логотипом и профилем -->
+    <div class="top-panel">
+      <img src="https://storage.yandexcloud.net/lbs3/avatar_ya.svg" alt="Логотип" class="logo">
+      <div style="text-align: center">
+        <h1>good {{ time }}, {{ user.firstName }}!</h1>
+        <h2>what will we check today?</h2>
+      </div>
+      <tui-avatar
+        size="l"
+        class="profile-avatar"
+        tuiLink
+        [tuiDropdown]="template"
+        [(tuiDropdownOpen)]="open"
+        src="{{user.avatarUrl || 'https://img.freepik.com/free-psd/3d-render-avatar-character_23-2150611737.jpg?t=st=1738766613~exp=1738770213~hmac=9542b311b21ef09b40a0c68b9c799c55f7a0877b7b92842522a630f971142ef4&w=1380'}}"
+      ></tui-avatar>
+      <ng-template #template>
+        <tui-data-list tuiDataListDropdownManager>
+          <tui-opt-group>
+            <ng-container>
+              <button
+                tuiOption
+                type="button"
+                class="dropdown-button"
+                (click)="openD = true"
+              >
+                <tui-icon icon="@tui.user"></tui-icon>
+                <tui-line-clamp
+                  content="Profile"
+                  [linesLimit]="2"
+                />
+              </button>
+              <button
+                tuiOption
+                type="button"
+                class="dropdown-button"
+                (click)="onMfa()"
+                *ngIf="!is2Fa"
+              >
+                <tui-icon icon="@tui.lock"></tui-icon>
+                <tui-line-clamp
+                  content="Link 2FA"
+                  [linesLimit]="2"
+                />
+              </button>
+              <button
+                tuiOption
+                type="button"
+                class="dropdown-button"
+                (click)="exitClick()"
+              >
+
+                <tui-icon icon="@tui.door-open"></tui-icon>
+                <tui-line-clamp
+                  content="Log out"
+                  [linesLimit]="2"
+                />
+              </button>
+            </ng-container>
+          </tui-opt-group>
+        </tui-data-list>
+      </ng-template>
+    </div>
+
+    <div id="heh">
+      <form [formGroup]="form" class="form-container">
+        <div class="textarea-container">
+          <tui-loader
+            class="loader"
+            [overlay]="true"
+            [showLoader]="loading"
+          >
+
+            <tui-textarea
+              id="hehehe"
+              style="border: 1px solid {{color}};"
+              formControlName="text"
+              [expandable]="false"
+              [maxLength]="65500"
+              [minlength]="1"
+            >
+              <div
+                *ngIf="form.get('text')?.value != undefined && form.get('text')?.value?.length != undefined && form.get('text')?.value!.length > 0 && form.get('text')?.value!.length > 65500"
+                tuiLabel style="color: red">Max 65500 chars!
+              </div>
+              <tui-error formControlName="text"
+                         [error]="[] | tuiFieldError | async"
+              ></tui-error>
+            </tui-textarea>
+          </tui-loader>
+        </div>
+        <span class="submit-hint"
+              *ngIf="form.get('text')?.value != undefined && form.get('text')?.value?.length != undefined && form.get('text')?.value!.length > 0 && form.get('text')?.value!.length <= 65500">
+          <span class="key-icon"><b>Shift</b></span> + <span class="key-icon"><b>Enter</b></span> to submit
+        </span>
+        <h2 style="color: {{color}};" id="result_t">{{ result }}</h2>
+        <img [src]="qrE" *ngIf="qrE != ''" width="500px" height="500px" class="qr">
+        <h2 tuiHeader="l" class="qr" *ngIf="qrE != ''" style="color: white; background: red; height: 300%">You have only one chance to activate it using Microsoft Authenticator or other app supports TOTP protocol. <br>DON'T RELOAD THIS PAGE!</h2>
+        <br>
+        <button
+          *ngIf="qrE != ''"
+          class="qr"
+          tuiButton
+          size="l"
+          style="background: black"
+          (click)="qrE=''"
+          >I activated it!</button>
+      </form>
+    </div>
+    <!--    <tui-thumbnail-card-->
+    <!--      paymentSystem="mir"-->
+    <!--      size="l"-->
+    <!--      class="gradient"-->
+    <!--    >-->
+    <!--      1234-->
+    <!--    </tui-thumbnail-card>-->
+  </div>
+  <ng-template
+    let-observer
+    [tuiSheetDialogOptions]="options"
+    [(tuiSheetDialog)]="openD"
+  >
+    <form
+      tuiForm="l"
+      [formGroup]="updateP"
+    >
+      <tui-textfield>
+        <label tuiLabel>First name</label>
+        <input
+          tuiTextfield
+          type="text"
+          [minlength]="4"
+          formControlName="name">
+      </tui-textfield>
+      <tui-textfield>
+        <label tuiLabel>Last name</label>
+        <input
+          tuiTextfield
+          type="text"
+          [minlength]="4"
+          formControlName="lastName">
+      </tui-textfield>
+    </form>
+    <br>
+    <footer class="footer">
+      <button
+        size="m"
+        tuiButton
+        type="button"
+        (click)="observer.complete()"
+      >
+        Save
+      </button>
+      <button
+        appearance="secondary"
+        size="m"
+        tuiButton
+        type="button"
+        (click)="observer.complete()"
+      >
+        Close
+      </button>
+    </footer>
+  </ng-template>
+</tui-root>
