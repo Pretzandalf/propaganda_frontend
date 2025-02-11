@@ -64,4 +64,11 @@ export class AuthService {
     })
     return this.http.post(`http://localhost:8081/api/p/mfa`, pass, { headers: headers });
   }
+
+  updatee(user: JSON) {
+    const headers = new HttpHeaders({
+      'Authorization': 'Bearer ' + this.cookieService.get('authToken'),
+    })
+    return this.http.post(`http://localhost:8081/api/p/update`, user, { headers: headers });
+  }
 }

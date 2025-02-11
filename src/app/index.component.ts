@@ -46,6 +46,7 @@ import {tuiMarkControlAsTouchedAndValidate} from '@taiga-ui/cdk';
 import {TuiSheetDialog, TuiSheetDialogOptions} from '@taiga-ui/addon-mobile';
 import {HttpResponse} from '@angular/common/http';
 import {DomSanitizer} from '@angular/platform-browser';
+import {routes} from './app.routes';
 
 interface Message {
   content: string;
@@ -239,5 +240,14 @@ export class IndexComponent implements OnInit {
       }
     )
     return false;
+  }
+
+  update() {
+    if (this.updateP.get("name")!.value == "" || this.updateP.get("lastName")!.value == "") return
+    this.user.firstName = this.updateP.get("name")!.value;
+    this.user.lastName = this.updateP.get("lastName")!.value;
+    this.authService.updatee(this.user).subscribe(() => {
+      this.router.navigate(['']);
+    })
   }
 }
